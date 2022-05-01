@@ -2,8 +2,14 @@ package com.example.examplemod;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
@@ -80,5 +86,22 @@ public class ExampleMod
             // register a new block here
             LOGGER.info("HELLO from Register Block");
         }
+    }
+
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE)
+    public static class OtherEvents {
+        @SubscribeEvent
+        public static void onEntityPlaceEvent(final BlockEvent.EntityPlaceEvent event) {
+            String message = "You picked up this item!";
+            ITextComponent msg = new StringTextComponent(message);
+//            PlayerEntity player = event.getPlayer();
+            PlayerEntity player = Minecraft.getInstance().player;
+
+            player.sendMessage(msg, player.getUUID());
+            System.out.println(message);
+
+//            BlockEvent.CropGrowEvent;
+        }
+
     }
 }
